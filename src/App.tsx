@@ -1,23 +1,26 @@
-import { Suspense, useEffect } from 'react'
-import { Canvas } from '@react-three/fiber'
-import * as THREE from 'three'
-import { Scene } from './components/Scene'
+import { lazy, Suspense, useEffect } from 'react'
+import { GameErrorBoundary } from './components/GameErrorBoundary'
+import { GameLoading } from './components/GameLoading'
 import { HUD } from './components/HUD'
 import { disposeBgm, pauseBgm, setBgmVolume } from './game/audio'
 import { installInputHandlers } from './game/input'
 import { useGame } from './game/store'
 import { asset } from './utils/asset'
 
+const GameStage = lazy(() => import('./components/GameStage').then((module) => ({ default: module.GameStage })))
+
 export default function App() {
+  const phase = useGame((state) => state.phase)
   const musicEnabled = useGame((state) => state.musicEnabled)
   const musicVolume = useGame((state) => state.musicVolume)
+  const openLevelSelect = useGame((state) => state.openLevelSelect)
 
   useEffect(() => installInputHandlers(), [])
 
   // 背景图用 CSS 变量注入：解析成相对当前文档的绝对 URL，
   // 子路径部署时也能正确指到 /projects/<slug>/assets/。
   useEffect(() => {
-    const url = new URL(asset('assets/princess-sky-garden.png'), document.baseURI).href
+    const url = new URL(asset('assets/princess-sky-garden.webp'), document.baseURI).href
     document.documentElement.style.setProperty('--sky', `url("${url}")`)
   }, [])
 
@@ -30,21 +33,13 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <Canvas
-        shadows
-        dpr={[1, 2]}
-        camera={{ position: [0, 10.5, 13.5], fov: 43, near: 0.1, far: 140 }}
-        gl={{
-          antialias: true,
-          alpha: true,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.1,
-        }}
-      >
-        <Suspense fallback={null}>
-          <Scene />
-        </Suspense>
-      </Canvas>
+      {phase !== 'levelSelect' && (
+        <GameErrorBoundary onBack={openLevelSelect}>
+          <Suspense fallback={<GameLoading />}>
+            <GameStage />
+          </Suspense>
+        </GameErrorBoundary>
+      )}
       <HUD />
     </main>
   )

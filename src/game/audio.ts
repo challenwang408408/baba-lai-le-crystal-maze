@@ -11,7 +11,7 @@ function getBgm() {
   if (typeof document === 'undefined') return null
   if (bgm) return bgm
 
-  const url = new URL(asset('assets/bgm-calm-loop.wav'), document.baseURI).href
+  const url = new URL(asset('assets/bgm-calm-loop.mp3'), document.baseURI).href
   bgm = new Audio(url)
   bgm.loop = true
   bgm.preload = 'auto'

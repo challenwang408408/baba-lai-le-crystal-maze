@@ -25,7 +25,7 @@ export function MazeBoard({ geom, children }: MazeBoardProps) {
   const reportTimer = useRef(0)
   const mode = useGame((state) => state.mode)
   const setBoardTilt = useGame((state) => state.setBoardTilt)
-  const floorTexture = useGameTexture(asset('assets/pearlescent-maze-floor.png'), 1.35, 1.35)
+  const floorTexture = useGameTexture(asset('assets/pearlescent-maze-floor.webp'), 1.35, 1.35)
 
   useFrame((_, delta) => {
     const body = boardRef.current

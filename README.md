@@ -42,16 +42,18 @@ npm run dev
 
 ## 美术素材
 
-- `public/assets/dad-chaser.png`：追逐者贴图（Codex imagegen 生成）。
-- `public/assets/princess-sky-garden.png`：童话城堡花园背景。
-- `public/assets/pearlescent-maze-floor.png`：珍珠迷宫地面纹理。
-- `public/assets/crystal-marble-swirl.png`：水晶珠内部纹理。
-- `public/assets/bgm-calm-loop.wav`：原创舒缓循环背景音乐。
+- `public/assets/dad-chaser.webp`：追逐者贴图（Codex imagegen 生成）。
+- `public/assets/princess-sky-garden.webp`：童话城堡花园背景。
+- `public/assets/pearlescent-maze-floor.webp`：珍珠迷宫地面纹理。
+- `public/assets/crystal-marble-swirl.webp`：水晶珠内部纹理。
+- `public/assets/bgm-calm-loop.mp3`：原创舒缓循环背景音乐。
 - 道具使用轻量 3D 造型，不依赖贴图。
 
 ## 性能处理
 
 线上曾出现拾取冻结道具时明显卡顿。根因是道具被拾取后卸载了包含动态 `pointLight` 的 React Three Fiber 子树，导致 Three.js 场景灯光数量变化。当前版本移除了道具内动态灯光，拾取后只隐藏节点，不再触发这类场景重建。
+
+首屏只加载选关界面；Three.js、Rapier 和 3D 场景在进入关卡时再按需加载。图片使用 WebP，背景音乐使用 MP3，进入关卡期间会显示资源加载进度。
 
 ## 验证
 

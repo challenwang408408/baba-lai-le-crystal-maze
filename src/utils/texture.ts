@@ -5,15 +5,14 @@ import * as THREE from 'three'
 // 容错加载：图片不存在或 404 也不会 suspend / 抛错，加载失败时返回 null。
 // 用于 codex 生成的道具贴图——素材没就位时组件回退到纯 3D 形状。
 export function useOptionalTexture(path?: string): THREE.Texture | null {
-  const [texture, setTexture] = useState<THREE.Texture | null>(null)
+  const [loaded, setLoaded] = useState<{ path: string; texture: THREE.Texture } | null>(null)
+  const texture = loaded && loaded.path === path ? loaded.texture : null
 
   useEffect(() => {
-    if (!path) {
-      setTexture(null)
-      return
-    }
+    if (!path) return
     let active = true
-    const loader = new THREE.TextureLoader()
+    // Optional artwork must not reopen the full-screen loader after the playable scene is ready.
+    const loader = new THREE.TextureLoader(new THREE.LoadingManager())
     loader.load(
       path,
       (tex) => {
@@ -23,12 +22,10 @@ export function useOptionalTexture(path?: string): THREE.Texture | null {
         }
         tex.colorSpace = THREE.SRGBColorSpace
         tex.anisotropy = 8
-        setTexture(tex)
+        setLoaded({ path, texture: tex })
       },
       undefined,
-      () => {
-        if (active) setTexture(null)
-      },
+      () => undefined,
     )
     return () => {
       active = false

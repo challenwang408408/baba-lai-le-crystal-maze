@@ -111,7 +111,7 @@ function MarbleMesh({
   radius: number
   innerRef: MutableRefObject<THREE.Group | null>
 }) {
-  const swirl = useGameTexture(asset('assets/crystal-marble-swirl.png'))
+  const swirl = useGameTexture(asset('assets/crystal-marble-swirl.webp'))
   const bubbles = useMemo(
     () =>
       Array.from({ length: 10 }, (_, index) => {

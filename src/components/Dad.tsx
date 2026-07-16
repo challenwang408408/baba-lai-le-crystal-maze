@@ -29,7 +29,7 @@ export function Dad({ maze, cellSize, marbleRadius, dadSpeed, dadStartDelay, spa
   const trailIndex = useRef(0) // 爸爸当前走到脚印的第几格（浮点）
   const spawnTime = useRef(0)
   const caughtFired = useRef(false)
-  const tex = useOptionalTexture(asset('assets/dad-chaser.png'))
+  const tex = useOptionalTexture(asset('assets/dad-chaser.webp'))
 
   const spawnWorld = useMemo(() => {
     const [x, , z] = cellToWorld(maze, cellSize, spawnCell.row, spawnCell.col)

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="image" type="image/webp" href="/assets/princess-sky-garden.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -11,7 +12,18 @@
     <title>爸爸来了，快吃饭盒 · Challen 王</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <section class="game-loading game-loading--boot" role="status" aria-label="游戏加载中">
+        <div class="loading-orbit" aria-hidden="true">
+          <span class="loading-orbit-ring"></span>
+          <span class="loading-orbit-marble"></span>
+          <span class="loading-orbit-star">✦</span>
+        </div>
+        <h2>正在打开彩虹城堡</h2>
+        <p>马上就好…</p>
+        <div class="loading-track" aria-hidden="true"><span></span></div>
+      </section>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

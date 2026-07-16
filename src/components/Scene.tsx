@@ -1,6 +1,6 @@
 import { Environment, Lightformer, Sparkles } from '@react-three/drei'
 import { Physics } from '@react-three/rapier'
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { buildMazeGeometry, generateSolvableMaze, worldToCell } from '../maze/generator'
 import type { MazeData } from '../maze/generator'
@@ -22,7 +22,7 @@ const WALL_THICKNESS = 0.18
 const WALL_HEIGHT = 0.72
 const MARBLE_RADIUS = 0.28
 
-export function Scene() {
+export function Scene({ onReady }: { onReady?: () => void }) {
   const level = useGame((state) => state.level)
   const levelRunId = useGame((state) => state.levelRunId)
   const resetCounter = useGame((state) => state.resetCounter)
@@ -95,9 +95,20 @@ export function Scene() {
         <Lightformer intensity={1.2} color="#b8f0d6" position={[8, 4, 1]} scale={[6, 5, 1]} form="rect" />
       </Environment>
       <CameraRig frameRadius={frameRadius} />
+      <SceneReady onReady={onReady} />
       {import.meta.env.DEV && <DevAutopilot maze={maze} cellSize={CELL_SIZE} endCell={maze.end} />}
     </>
   )
+}
+
+function SceneReady({ onReady }: { onReady?: () => void }) {
+  const reported = useRef(false)
+  useFrame(() => {
+    if (reported.current) return
+    reported.current = true
+    onReady?.()
+  })
+  return null
 }
 
 // 开发期测试用：设 window.__autopilot=true 时自动沿 BFS 解路把珠子开向终点。
